@@ -78,6 +78,7 @@ create_env() {
   write_profile "$BP_DIR" "$BUILD_DIR"
   export_env_dir "$ENV_DIR"
   create_default_env
+  add_oracle_env "$BUILD_DIR/.heroku"
 }
 
 header "Creating runtime environment"
@@ -133,9 +134,11 @@ restore_cache | output "$LOG_FILE"
 
 build_dependencies() {
   if $PREBUILD; then
+    install_oracle_libraries "$BUILD_DIR/.heroku"
     echo "Prebuild detected (node_modules already exists)"
     rebuild_node_modules "$BUILD_DIR"
   else
+    install_oracle_libraries "$BUILD_DIR/.heroku"
     install_node_modules "$BUILD_DIR"
   fi
 }
